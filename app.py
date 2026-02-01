@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
 import redis
 import time
+import os
 
 app = Flask(__name__)
 
-cache = redis.Redis(host='redis', port=6379)
+redis_host = os.environ.get('REDIS_HOST', 'redis')
+cache = redis.Redis(host=redis_host, port=6379)
 
 def get_hit_count():
     retries = 5
@@ -19,10 +21,14 @@ def get_hit_count():
 
 @app.route('/')
 def home():
-    count = get_hit_count()
+    try:
+        count = get_hit_count()
+    except redis.exceptions.ConnectionError:
+        count = "Błąd połączenia z bazą"
+        
     return jsonify({
         "message": "Cześć! To środowisko jest na ocenę 4.0!",
-        "visits": count, 
+        "visits": count,
         "status": "success"
     })
 
