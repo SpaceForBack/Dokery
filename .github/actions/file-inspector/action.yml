@@ -1,0 +1,24 @@
+name: 'Inspektor Plików'
+description: 'Sprawdza czy dany plik istnieje i raportuje sukces'
+
+inputs:
+  filename: 
+    description: 'Nazwa pliku do sprawdzenia'
+    required: true
+    default: 'README.md'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Sprawdź plik
+      shell: bash 
+      run: |
+        echo "🔍 Uruchamiam Inspektora..."
+        
+        # ${{ inputs.filename }} to miejsce, gdzie GitHub wstawi nazwę pliku
+        if [ -f "${{ inputs.filename }}" ]; then
+          echo "✅ Sukces! Plik '${{ inputs.filename }}' istnieje."
+        else
+          echo "❌ Błąd! Plik '${{ inputs.filename }}' nie został znaleziony!"
+          exit 1 # Zakończ z błędem (to przerwie cały pipeline na czerwono)
+        fi
