@@ -27,7 +27,7 @@ def home():
         count = "Błąd połączenia z bazą"
         
     return jsonify({
-        "message": "Cześć! To środowisko jest na ocenę 4.0!",
+        "message": "Przy programowaniu nie ucierpaiło żadne zwierzę",
         "visits": count,
         "status": "success"
     })
